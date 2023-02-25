@@ -1,3 +1,3 @@
 module github.com/cristaloleg/protohackers
 
-go 1.20
+go 1.19
