@@ -1,0 +1,22 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  CLOUD_HOST: xx.xx.xx.xx
+  BUILD_ARGS: -trimpath -ldflags=-buildid=
+
+tasks:
+  build:
+    cmds:
+      - go build ./...
+
+  deploy:
+    env:
+      GOOS: linux
+      GOARCH: amd64
+      CGO_ENABLED: 0
+    cmds:
+      - go build -o prod.exec {{ .BUILD_ARGS }} ./{{.CLI_ARGS}}
+      - rsync -az prod.exec root@{{ .CLOUD_HOST }}:/root/ph_{{.CLI_ARGS}}.exec
+      - rm prod.exec
